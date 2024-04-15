@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  payment_system_db:
+    container_name: payment_system_db
+    image: postgres
+    environment:
+      POSTGRES_DB: payment_system_db
+      POSTGRES_USER: payment_system
+      POSTGRES_PASSWORD: payment_system
+      PGDATA: /data/payment_system
+    volumes:
+      - payment_system_data:/data/payment_system
+    ports:
+      - "5432:5432"
+volumes:
+  payment_system_data:

@@ -1,2 +1,2 @@
-# payment_system_gkavalov
+# gkavalov_payment_system
 eMerchantPay Task
