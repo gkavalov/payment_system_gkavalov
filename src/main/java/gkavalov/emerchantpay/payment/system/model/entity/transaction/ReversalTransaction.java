@@ -1,5 +1,7 @@
-package gkavalov.emerchantpay.payment.system.model;
+package gkavalov.emerchantpay.payment.system.model.entity.transaction;
 
+import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
+import gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PostPersist;
 

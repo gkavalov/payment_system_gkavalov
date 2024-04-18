@@ -4,7 +4,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     url: jdbc:postgresql://localhost/payment_system_db
     username: payment_system
     password: payment_system
+    driver-class-name: org.postgresql.Driver
+
+payment:
+  system:
+    api:
+      version: /v1

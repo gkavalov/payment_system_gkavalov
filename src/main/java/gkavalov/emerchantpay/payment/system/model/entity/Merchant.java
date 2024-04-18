@@ -1,4 +1,4 @@
-package gkavalov.emerchantpay.payment.system.model;
+package gkavalov.emerchantpay.payment.system.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Table
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Merchant {
@@ -34,5 +35,5 @@ public class Merchant {
     private BigDecimal totalTransactionSum;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "merchant")
-    private Set<Transaction> transactions;
+    private Set<Transaction> transactions = new HashSet<>();
 }

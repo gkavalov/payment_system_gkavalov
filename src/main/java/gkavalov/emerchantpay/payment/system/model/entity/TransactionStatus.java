@@ -1,4 +1,4 @@
-package gkavalov.emerchantpay.payment.system.model;
+package gkavalov.emerchantpay.payment.system.model.entity;
 
 public enum TransactionStatus {
     APPROVED,

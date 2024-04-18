@@ -1,10 +1,14 @@
 package gkavalov.emerchantpay.payment.system.service;
 
-import org.springframework.stereotype.Service;
+import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
+import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 
-@Service
-public class TransactionService {
-    // TODO Only approved or refunded transactions can be referenced,
-    // otherwise the status of the submitted transaction will be created with
-    // error status
+import java.util.Set;
+
+public interface TransactionService {
+
+    Set<Transaction> getAllTransactions();
+
+    void createTransactionForMerchant(final TransactionDto transactionDto, final Merchant merchant);
 }

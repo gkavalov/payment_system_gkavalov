@@ -1,4 +1,4 @@
-package gkavalov.emerchantpay.payment.system.model;
+package gkavalov.emerchantpay.payment.system.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table
 @Entity
+@Table
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -43,9 +43,10 @@ public class Transaction {
     private String referenceId;
 
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "belongs_to")
+    @JoinColumn(name = "belongs_to", unique = true)
     private Transaction belongsTo;
 
     @ManyToOne
+    @NotNull
     private Merchant merchant;
 }
