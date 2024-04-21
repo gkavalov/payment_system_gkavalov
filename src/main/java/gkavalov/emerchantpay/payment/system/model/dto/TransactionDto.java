@@ -1,5 +1,6 @@
 package gkavalov.emerchantpay.payment.system.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class TransactionDto {
 
     @Positive
@@ -32,6 +34,5 @@ public abstract class TransactionDto {
 
     private TransactionDto belongsTo;
 
-    @NotNull
     private MerchantDto merchant;
 }

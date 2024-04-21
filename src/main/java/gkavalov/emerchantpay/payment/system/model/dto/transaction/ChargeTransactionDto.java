@@ -1,6 +1,8 @@
 package gkavalov.emerchantpay.payment.system.model.dto.transaction;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,16 +14,14 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChargeTransactionDto extends TransactionDto {
 
     private BigDecimal approvedAmount;
 
-
-    /*public ChargeTransactionDto(final BigDecimal amount, final TransactionStatus status,
-                                final String customerEmail, final String customerPhone, final String referenceId,
-                                final TransactionDto belongsTo, final MerchantDto merchant, final BigDecimal approvedAmount) {
-        super(amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
-        this.approvedAmount = approvedAmount;
-    }*/
-
+    public ChargeTransactionDto(final ChargeTransaction charge) {
+        super(charge.getAmount(), charge.getStatus(), charge.getCustomerEmail(), charge.getCustomerPhone(),
+                charge.getReferenceId(), null, null);
+        this.approvedAmount = charge.getApprovedAmount();
+    }
 }

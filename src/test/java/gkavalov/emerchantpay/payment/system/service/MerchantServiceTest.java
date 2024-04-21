@@ -1,6 +1,6 @@
 package gkavalov.emerchantpay.payment.system.service;
 
-import gkavalov.emerchantpay.payment.system.exception.InactiveMerchant;
+import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.repository.MerchantRepository;
 import gkavalov.emerchantpay.payment.system.service.impl.MerchantServiceImpl;
@@ -52,7 +52,7 @@ class MerchantServiceTest {
     }
 
     @Test
-    void testGetMerchantEmpty() {
+    void testNoMerchantFound() {
         // given
         final Long merchantId = 2L;
         when(mockMerchantRepository.findById(merchantId)).thenReturn(Optional.empty());
@@ -61,7 +61,7 @@ class MerchantServiceTest {
     }
 
     @Test
-    void testGetActiveMerchant() throws InactiveMerchant {
+    void testGetActiveMerchant() throws InactiveMerchantException {
         // given
         final Long merchantId = 1L;
         when(mockMerchantRepository.findById(merchantId)).thenReturn(Optional.of(MOCK_MERCHANT_1));
@@ -78,7 +78,7 @@ class MerchantServiceTest {
         final Long merchantId = 2L;
         when(mockMerchantRepository.findById(merchantId)).thenReturn(Optional.of(MOCK_MERCHANT_2));
         // when and then
-        assertThrows(InactiveMerchant.class, () -> underTest.isMerchantActive(merchantId));
+        assertThrows(InactiveMerchantException.class, () -> underTest.isMerchantActive(merchantId));
     }
 
     @Test

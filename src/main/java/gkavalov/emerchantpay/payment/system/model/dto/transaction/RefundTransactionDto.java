@@ -1,6 +1,8 @@
 package gkavalov.emerchantpay.payment.system.model.dto.transaction;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.RefundTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +14,14 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RefundTransactionDto extends TransactionDto {
 
     private BigDecimal reversedAmount;
+
+    public RefundTransactionDto(final RefundTransaction refund) {
+        super(refund.getAmount(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
+                refund.getReferenceId(), null, null);
+        this.reversedAmount = refund.getReversedAmount();
+    }
 }

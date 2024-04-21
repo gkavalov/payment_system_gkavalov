@@ -39,6 +39,20 @@ class MerchantMapperTest {
     }
 
     @Test
+    void testEntityConversion() {
+        final MerchantDto dto = mapperToTest.toDto(MOCK_MERCHANT_1);
+        final Merchant entity = mapperToTest.toEntity(dto);
+
+        assertEquals(entity.getDescription(), MOCK_MERCHANT_1.getDescription());
+        assertEquals(entity.getName(), MOCK_MERCHANT_1.getName());
+        assertEquals(entity.getEmail(), MOCK_MERCHANT_1.getEmail());
+        assertEquals(entity.getStatus(), MOCK_MERCHANT_1.getStatus());
+        assertEquals(entity.getTotalTransactionSum(), MOCK_MERCHANT_1.getTotalTransactionSum());
+        // TODO Resolve the cyclical mapping
+        //assertEquals(entity.getTransactions().size(), MOCK_MERCHANT_1.getTransactions().size());
+    }
+
+    @Test
     void testEntityWithMerchantConversion() {
         final Merchant localMockedMerchant = new Merchant(1L, "test-merchant-1-name",
                 "test-merchant-1-description", "test@merchant.one", MerchantStatus.ACTIVE,

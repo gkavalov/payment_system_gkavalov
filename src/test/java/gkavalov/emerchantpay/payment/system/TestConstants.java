@@ -2,7 +2,6 @@ package gkavalov.emerchantpay.payment.system;
 
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus;
-import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus;
 import gkavalov.emerchantpay.payment.system.model.entity.transaction.AuthorizeTransaction;
 import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
@@ -24,12 +23,12 @@ public class TestConstants {
             "test-merchant-2-description", "test@merchant.two", MerchantStatus.INACTIVE,
             new BigDecimal(1.0), new HashSet<>());
 
-    public static final Transaction MOCK_TRANSACTION_1 =
+    public static final AuthorizeTransaction MOCK_TRANSACTION_1 =
             new AuthorizeTransaction(UUID.randomUUID(), new BigDecimal(1.0), TransactionStatus.APPROVED,
-                    "test@customer.email", "0123456789", null, null,
+                    "test@customer.email", "0123456789", null,
                     MOCK_MERCHANT_1, new BigDecimal(1.0));
 
-    public static final Transaction MOCK_TRANSACTION_2 =
+    public static final ChargeTransaction MOCK_TRANSACTION_2 =
             new ChargeTransaction(UUID.randomUUID(), new BigDecimal(1.0), TransactionStatus.APPROVED,
                     "test@customer.email", "0123456789", null, MOCK_TRANSACTION_1,
                     MOCK_MERCHANT_1, new BigDecimal(1.0));

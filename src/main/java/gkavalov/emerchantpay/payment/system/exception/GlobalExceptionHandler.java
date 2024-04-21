@@ -14,13 +14,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InactiveMerchant.class)
-    public ResponseEntity<String> handleInactiveMerchant(final InactiveMerchant ex) {
+    @ExceptionHandler({InactiveMerchantException.class, NonPayableTransactionException.class})
+    public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
+    public ResponseEntity<String> handleGeneralError(final Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
