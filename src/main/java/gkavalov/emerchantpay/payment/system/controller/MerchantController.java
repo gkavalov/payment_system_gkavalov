@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "${payment.system.api.version}/merchants")
+@RequestMapping(path = "merchants")
 @RequiredArgsConstructor
 public class MerchantController {
 

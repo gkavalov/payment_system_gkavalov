@@ -1,6 +1,7 @@
 spring:
   application:
     name: Payment System
+    api-version: v1
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,7 +14,7 @@ spring:
     password: payment_system
     driver-class-name: org.postgresql.Driver
 
-payment:
-  system:
-    api:
-      version: /v1
+server:
+  port: 8080
+  servlet:
+    context-path: "/${spring.application.api-version}"

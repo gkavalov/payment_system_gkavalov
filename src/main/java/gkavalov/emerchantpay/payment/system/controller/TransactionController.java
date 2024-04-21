@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "${payment.system.api.version}/transactions")
+@RequestMapping(path = "transactions")
 @RequiredArgsConstructor
 public class TransactionController {
 
