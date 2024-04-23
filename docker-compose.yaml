@@ -13,5 +13,23 @@ services:
       - payment_system_data:/data/payment_system
     ports:
       - "5432:5432"
+    networks:
+      - payment_system_network
+
+  payment_system_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - payment_system_db
+    networks:
+      - payment_system_network
+
 volumes:
   payment_system_data:
+
+networks:
+  payment_system_network:
+    driver: bridge

@@ -9,7 +9,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgresql://localhost/payment_system_db
+    url: jdbc:postgresql://payment_system_db/payment_system_db # resolvable host is docker container name
     username: payment_system
     password: payment_system
     driver-class-name: org.postgresql.Driver

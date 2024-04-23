@@ -12,6 +12,7 @@ import gkavalov.emerchantpay.payment.system.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,6 +42,12 @@ public class MerchantController {
             throws URISyntaxException {
         final Merchant merchant = merchantService.createMerchant(merchantDto);
         return ResponseEntity.created(new URI(merchant.getId().toString())).build();
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<String> importMerchants(final MultipartFile usersCsv) {
+        // TODO Imports new merchants and admins from CSV
+        throw new UnsupportedOperationException();
     }
 
     @PutMapping("/{id}")
