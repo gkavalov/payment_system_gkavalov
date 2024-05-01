@@ -29,17 +29,17 @@ public interface TransactionMapper extends TransactionsFactory {
     @Mapping(target = "belongsTo", qualifiedByName = "toNestedDto")
     TransactionDto toNestedDto(final Transaction transaction);
 
-    default Set<TransactionDto> toTopLevelDto(final Set<Transaction> transactions) {
+    default Set<TransactionDto> toDto(final Set<Transaction> transactions) {
         return transactions
                 .stream()
-                .map(this::toTopLevelDto)
+                .map(this::toDto)
                 .collect(Collectors.toSet());
     }
 
-    @Named("toTopLevelDto")
+    @Named("toDto")
     @Mapping(target = "merchant.transactions", ignore = true)
-    @Mapping(target = "belongsTo", qualifiedByName = "toTopLevelDto")
-    TransactionDto toTopLevelDto(final Transaction transaction);
+    @Mapping(target = "belongsTo", qualifiedByName = "toDto")
+    TransactionDto toDto(final Transaction transaction);
 
     @Mapping(target = "merchant", ignore = true)
     Transaction toEntity(final TransactionDto transactionDto);

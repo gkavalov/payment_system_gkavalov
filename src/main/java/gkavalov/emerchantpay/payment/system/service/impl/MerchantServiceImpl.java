@@ -2,6 +2,7 @@ package gkavalov.emerchantpay.payment.system.service.impl;
 
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
+import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.repository.MerchantRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,12 +40,24 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Merchant createMerchant(final MerchantDto merchant) {
-        return merchantRepository.save(merchantMapper.toEntity(merchant));
+        return updateMerchant(merchantMapper.toEntity(merchant));
     }
 
     @Override
-    public void updateMerchant(Merchant merchant) {
-        merchantRepository.save(merchant);
+    public Merchant updateMerchant(final Long id, final CreateUpdateMerchantDto updatedMerchant) {
+        final Merchant merchant = getMerchant(id);
+        merchantMapper.updateMerchant(merchant, updatedMerchant);
+        return updateMerchant(merchant);
+    }
+
+    @Override
+    public Merchant updateMerchant(final Merchant updatedMerchant) {
+        return merchantRepository.save(updatedMerchant);
+    }
+
+    @Override
+    public long bulkImport(final InputStream inputStream) {
+        return 0;
     }
 
     @Override

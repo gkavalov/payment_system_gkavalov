@@ -34,6 +34,6 @@ public class Merchant {
     @Column(name = "total_transaction_sum")
     private BigDecimal totalTransactionSum;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "merchant")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "merchant")
     private Set<Transaction> transactions = new HashSet<>();
 }

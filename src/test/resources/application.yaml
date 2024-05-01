@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:h2:mem:payment_system_db # resolvable host is docker container name
+    username: payment_system
+    password: payment_system
+    driver-class-name: org.h2.Driver

@@ -2,9 +2,9 @@ package gkavalov.emerchantpay.payment.system.controller;
 
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
+import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
-import gkavalov.emerchantpay.payment.system.model.dto.UpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import gkavalov.emerchantpay.payment.system.service.MerchantService;
@@ -18,10 +18,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
 
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
 @RestController
-@RequestMapping(path = "merchants")
+@RequestMapping(path = MerchantController.MERCHANTS_PATH)
 @RequiredArgsConstructor
 public class MerchantController {
+
+    public static final String MERCHANTS_PATH = "/merchants";
 
     private final MerchantService merchantService;
     private final MerchantMapper merchantMapper;
@@ -52,24 +56,23 @@ public class MerchantController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MerchantDto> updateMerchant(@PathVariable("id") final Long id,
-                                                      @RequestBody final UpdateMerchantDto merchantUpdate) {
-        final Merchant merchant = merchantService.getMerchant(id);
-        merchantMapper.updateMerchant(merchant, merchantUpdate);
-        return ResponseEntity.ok(merchantMapper.toDto(merchant));
+                                                      @RequestBody final CreateUpdateMerchantDto merchantUpdate) {
+        Merchant updated = merchantService.updateMerchant(id, merchantUpdate);
+        return ResponseEntity.ok(merchantMapper.toDto(updated));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> destroyMerchant(@PathVariable("id") final Long id) {
         merchantService.deleteMerchant(id);
         return ResponseEntity.ok("Merchant %d deleted".formatted(id));
     }
 
-    @PostMapping("/{id}/transaction")
+    @PostMapping("/{id}/transactions")
     public ResponseEntity<TransactionDto> createTransaction(@PathVariable("id") final Long id,
                                                             @RequestBody final TransactionDto transactionDto)
             throws InactiveMerchantException, URISyntaxException {
         final Merchant merchant = merchantService.isMerchantActive(id);
         Transaction transaction = transactionService.createTransactionForMerchant(transactionDto, merchant);
-        return ResponseEntity.created(new URI("/v1/transactions/" + transaction.getUuid().toString())).build();
+        return ResponseEntity.created(new URI("/transactions/" + transaction.getUuid().toString())).build();
     }
 }

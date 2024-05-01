@@ -42,11 +42,11 @@ public class Transaction {
     @Column(name = "reference_id")
     private String referenceId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "belongs_to", unique = true)
     private Transaction belongsTo;
 
-    @ManyToOne
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     private Merchant merchant;
 }

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UpdateMerchantDto {
+public class CreateUpdateMerchantDto {
 
     private String name;
 

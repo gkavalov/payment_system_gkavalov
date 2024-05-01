@@ -1,9 +1,11 @@
 package gkavalov.emerchantpay.payment.system.service;
 
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
+import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 
+import java.io.InputStream;
 import java.util.Set;
 
 public interface MerchantService {
@@ -18,5 +20,9 @@ public interface MerchantService {
 
     void deleteMerchant(final Long id);
 
-    void updateMerchant(final Merchant merchant);
+    Merchant updateMerchant(final Long id, final CreateUpdateMerchantDto merchant);
+
+    Merchant updateMerchant(final Merchant merchant);
+
+    long bulkImport(InputStream inputStream);
 }

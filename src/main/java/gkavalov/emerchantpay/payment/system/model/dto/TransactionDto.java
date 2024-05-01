@@ -1,6 +1,8 @@
 package gkavalov.emerchantpay.payment.system.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonDeserialize(using = TransactionDtoDeserialiser.class)
 public abstract class TransactionDto {
 
     @Positive
@@ -32,7 +35,18 @@ public abstract class TransactionDto {
 
     private String referenceId;
 
+    @JsonDeserialize(using = TransactionDtoDeserialiser.class)
     private TransactionDto belongsTo;
 
     private MerchantDto merchant;
+
+    protected TransactionDto(final JsonNode node) {
+        this.amount = node.has("amount") ? node.get("amount").decimalValue() : new BigDecimal("0.0");
+        this.status = node.has("status") ? TransactionStatus.valueOf(node.get("status").asText()) : null;
+        this.customerEmail = node.has("customerEmail") ? node.get("customerEmail").asText() : null;
+        this.customerPhone = node.has("customerPhone") ? node.get("customerPhone").asText() : null;
+        this.referenceId = node.has("referenceId") ? node.get("referenceId").asText() : null;
+        this.belongsTo = TransactionDtoFactory.makeTransaction(node.get("belongsTo"));
+        this.merchant = node.has("merchant") ? new MerchantDto(node.get("merchant")) : null;
+    }
 }

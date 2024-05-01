@@ -16,8 +16,8 @@ import org.mapstruct.TargetType;
 public interface TransactionsFactory {
 
     @ObjectFactory
-    default <T extends TransactionDto> T toTransactionDto(final Transaction transaction,
-                                                         @TargetType final Class<T> type) {
+    default <T extends TransactionDto> T toDto(final Transaction transaction,
+                                               @TargetType final Class<T> type) {
 
         return switch (transaction) {
             case AuthorizeTransaction at -> type.cast(new AuthorizeTransactionDto(at));
@@ -29,8 +29,8 @@ public interface TransactionsFactory {
     }
 
     @ObjectFactory
-    default <T extends Transaction> T toTransactionEntity(final TransactionDto transactionDto,
-                                                         @TargetType final Class<T> type) {
+    default <T extends Transaction> T toEntity(final TransactionDto transactionDto,
+                                               @TargetType final Class<T> type) {
         return switch (transactionDto) {
             case AuthorizeTransactionDto at -> type.cast(new AuthorizeTransaction(at));
             case ChargeTransactionDto ct -> type.cast(new ChargeTransaction(ct));

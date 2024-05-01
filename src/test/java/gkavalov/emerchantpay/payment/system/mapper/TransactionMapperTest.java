@@ -19,7 +19,7 @@ class TransactionMapperTest {
 
     @Test
     void testDtoConversion() {
-        final TransactionDto mappedDto = mapperToTest.toTopLevelDto(Set.of(MOCK_TRANSACTION_2)).toArray(new TransactionDto[]{})[0];
+        final TransactionDto mappedDto = mapperToTest.toDto(Set.of(MOCK_TRANSACTION_2)).toArray(new TransactionDto[]{})[0];
 
         assertEquals(mappedDto.getStatus(), MOCK_TRANSACTION_2.getStatus());
         TransactionDto mappedBelongsTo = mapperToTest.toNestedDto(MOCK_TRANSACTION_2.getBelongsTo());
@@ -36,7 +36,7 @@ class TransactionMapperTest {
 
     @Test
     void testEntityConversion() {
-        final TransactionDto mappedDto = mapperToTest.toTopLevelDto(MOCK_TRANSACTION_2);
+        final TransactionDto mappedDto = mapperToTest.toDto(MOCK_TRANSACTION_2);
         final Transaction mappedEntity = mapperToTest.toEntity(mappedDto);
 
         assertEquals(mappedEntity.getStatus(), MOCK_TRANSACTION_2.getStatus());
@@ -54,7 +54,7 @@ class TransactionMapperTest {
 
     @Test
     void testEntityConversionWithMerchant() {
-        TransactionDto mappedTransactionDto = mapperToTest.toTopLevelDto(MOCK_TRANSACTION_1);
+        TransactionDto mappedTransactionDto = mapperToTest.toDto(MOCK_TRANSACTION_1);
         Transaction entityWithMerchant = mapperToTest.toEntityWithMerchant(mappedTransactionDto, MOCK_MERCHANT_1);
 
         assertEquals(entityWithMerchant.getAmount(), mappedTransactionDto.getAmount());

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -87,7 +88,7 @@ class TransactionServiceTest {
     @Test
     void testCreateTransaction() {
         // given
-        TransactionDto transactionDto = mockTransactionMapper.toTopLevelDto(MOCK_TRANSACTION_1);
+        TransactionDto transactionDto = mockTransactionMapper.toDto(MOCK_TRANSACTION_1);
         when(mockTransactionRepository.save(any())).thenReturn(MOCK_TRANSACTION_1);
 
         // when
@@ -102,7 +103,7 @@ class TransactionServiceTest {
     @Test
     void testPayTransaction() throws NonPayableTransactionException, InactiveMerchantException {
         // given
-        final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toTopLevelDto(MOCK_TRANSACTION_2);
+        final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toDto(MOCK_TRANSACTION_2);
         when(mockTransactionRepository.findById(MOCK_TRANSACTION_1.getUuid())).thenReturn(Optional.of(MOCK_TRANSACTION_1));
         when(mockTransactionRepository.save(any())).thenReturn(MOCK_TRANSACTION_2);
 
@@ -113,12 +114,15 @@ class TransactionServiceTest {
         verify(mockTransactionRepository).save(transactionCaptor.capture());
         assertEquals(MOCK_TRANSACTION_1.getMerchant().getId(), transactionCaptor.getValue().getMerchant().getId());
         assertEquals(MOCK_TRANSACTION_2.getUuid(), chargeTransaction.getUuid());
+
+        // cleanup
+        MOCK_MERCHANT_1.setTotalTransactionSum(new BigDecimal("1.0"));
     }
 
     @Test
     void testPayIncorrectTransactionType() {
         // given
-        final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toTopLevelDto(MOCK_TRANSACTION_2);
+        final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toDto(MOCK_TRANSACTION_2);
         when(mockTransactionRepository.findById(MOCK_TRANSACTION_2.getUuid())).thenReturn(Optional.of(MOCK_TRANSACTION_2));
 
         // when and then

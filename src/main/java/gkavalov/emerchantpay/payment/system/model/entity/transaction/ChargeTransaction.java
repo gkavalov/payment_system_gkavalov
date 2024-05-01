@@ -52,7 +52,7 @@ public class ChargeTransaction extends Transaction {
                 .map(t -> ((ChargeTransaction) t).getApprovedAmount())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        if (!expectedTotalTransactionSum.equals(actualChargedSum)) {
+        if (!expectedTotalTransactionSum.stripTrailingZeros().equals(actualChargedSum.stripTrailingZeros())) {
             throw new InvalidTotalSumException(getMerchant().getId());
         }
     }

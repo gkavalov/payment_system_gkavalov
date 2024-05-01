@@ -13,6 +13,7 @@ import gkavalov.emerchantpay.payment.system.repository.TransactionRepository;
 import gkavalov.emerchantpay.payment.system.service.MerchantService;
 import gkavalov.emerchantpay.payment.system.service.TransactionService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
@@ -51,19 +52,27 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public ChargeTransaction paymentForTransaction(final UUID uuid, final ChargeTransactionDto transactionDto)
+    @Transactional
+    public ChargeTransaction paymentForTransaction(final UUID uuid, final ChargeTransactionDto charge)
             throws NonPayableTransactionException, InactiveMerchantException {
-        final Transaction transaction = getTransaction(uuid);
-        final Merchant merchant = transaction.getMerchant();
+        Transaction transaction = getTransaction(uuid);
+        if (transaction instanceof AuthorizeTransaction at) {
+            final Merchant merchant = at.getMerchant();
+            // if merchant is active
+            merchantService.isMerchantActive(merchant.getId());
 
-        merchantService.isMerchantActive(merchant.getId());
-        if (transaction instanceof AuthorizeTransaction) {
-            final ChargeTransaction transactionForMerchant = (ChargeTransaction) createTransactionForMerchant(transactionDto, merchant);
-            merchant.setTotalTransactionSum(merchant.getTotalTransactionSum().add(transactionForMerchant.getApprovedAmount()));
+            // create charge transaction
+            ChargeTransaction chargeTransaction = (ChargeTransaction) transactionMapper.toEntityWithMerchant(charge, merchant);
+            chargeTransaction.setBelongsTo(at);
+            chargeTransaction = transactionRepository.save(chargeTransaction);
+
+            // update merchants total sum
+            merchant.setTotalTransactionSum(merchant.getTotalTransactionSum().add(charge.getApprovedAmount()));
             merchantService.updateMerchant(merchant);
-            return transactionForMerchant;
+
+            return chargeTransaction;
         } else {
-            throw new NonPayableTransactionException(uuid.toString(), transaction.getClass().getSimpleName());
+            throw new NonPayableTransactionException(transaction.getClass().getSimpleName(), uuid.toString());
         }
     }
 }

@@ -17,26 +17,28 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "transactions")
+@RequestMapping(path = TransactionController.TRANSACTIONS_PATH)
 @RequiredArgsConstructor
 public class TransactionController {
+
+    public static final String TRANSACTIONS_PATH = "/transactions";
 
     private final TransactionService transactionService;
     private final TransactionMapper transactionMapper;
 
     @GetMapping
     public ResponseEntity<Set<TransactionDto>> getAllTransactions() {
-        return ResponseEntity.ok(transactionMapper.toTopLevelDto(transactionService.getAllTransactions()));
+        return ResponseEntity.ok(transactionMapper.toDto(transactionService.getAllTransactions()));
     }
 
     @GetMapping("/{uuid}")
     public ResponseEntity<TransactionDto> getTransaction(@PathVariable("uuid") final UUID uuid) {
-        return ResponseEntity.ok(transactionMapper.toTopLevelDto(transactionService.getTransaction(uuid)));
+        return ResponseEntity.ok(transactionMapper.toDto(transactionService.getTransaction(uuid)));
     }
 
     @PostMapping("/{uuid}/payment")
-    public ResponseEntity<TransactionDto> acceptPaymentForTransaction(@PathVariable("uuid") final UUID uuid,
-                                                                      @RequestBody final ChargeTransactionDto transactionDto)
+    public ResponseEntity<String> acceptPaymentForTransaction(@PathVariable("uuid") final UUID uuid,
+                                                              @RequestBody final ChargeTransactionDto transactionDto)
             throws URISyntaxException, NonPayableTransactionException, InactiveMerchantException {
         final ChargeTransaction charge = transactionService.paymentForTransaction(uuid, transactionDto);
         return ResponseEntity.created(new URI(charge.getUuid().toString())).build();
