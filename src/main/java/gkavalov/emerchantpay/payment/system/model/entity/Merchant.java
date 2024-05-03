@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,16 +24,21 @@ public class Merchant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String description;
 
+    @Email
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private MerchantStatus status;
 
-    @Column(name = "total_transaction_sum")
+    @NotNull
+    @Column(nullable = false, name = "total_transaction_sum")
     private BigDecimal totalTransactionSum;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "merchant")

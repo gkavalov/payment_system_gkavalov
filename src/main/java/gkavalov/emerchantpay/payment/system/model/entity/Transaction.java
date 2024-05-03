@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -44,9 +45,10 @@ public class Transaction {
     private String customerEmail;
 
     @Column(name = "customer_phone")
+    @Pattern(regexp = "\\d{10,11}")
     private String customerPhone;
 
-    @Column(name = "reference_id")
+    @Column(name = "reference_id", unique = true)
     private String referenceId;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
