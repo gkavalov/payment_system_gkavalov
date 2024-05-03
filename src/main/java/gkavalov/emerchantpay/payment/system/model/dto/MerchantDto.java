@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -33,5 +34,5 @@ public class MerchantDto extends CreateUpdateMerchantDto {
         setTransactions(null);
     }
 
-    private Set<TransactionDto> transactions;
+    private Set<TransactionDto> transactions = new HashSet<>();
 }

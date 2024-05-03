@@ -1,5 +1,7 @@
 package gkavalov.emerchantpay.payment.system.controller;
 
+import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
+import gkavalov.emerchantpay.payment.system.exception.EmptyCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
@@ -14,10 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
 
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RestController
@@ -48,10 +52,19 @@ public class MerchantController {
         return ResponseEntity.created(new URI(merchant.getId().toString())).build();
     }
 
-    @PostMapping("/import")
-    public ResponseEntity<String> importMerchants(final MultipartFile usersCsv) {
-        // TODO Imports new merchants and admins from CSV
-        throw new UnsupportedOperationException();
+    @PostMapping(value = "/import", consumes = APPLICATION_OCTET_STREAM_VALUE, produces = TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> importMerchants(@RequestParam("file") final MultipartFile merchantsCsv)
+            throws EmptyCsvFileException, CorruptCsvFileException {
+        if (merchantsCsv.isEmpty()) {
+            throw new EmptyCsvFileException();
+        }
+
+        try {
+            long importedMerchants = merchantService.bulkImport(merchantsCsv.getInputStream());
+            return ResponseEntity.ok("%d merchants were imported".formatted(importedMerchants));
+        } catch (final IOException e) {
+            throw new CorruptCsvFileException(e);
+        }
     }
 
     @PutMapping("/{id}")

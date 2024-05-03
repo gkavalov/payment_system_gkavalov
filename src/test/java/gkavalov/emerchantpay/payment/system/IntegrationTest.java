@@ -17,6 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import static gkavalov.emerchantpay.payment.system.controller.MerchantController.MERCHANTS_PATH;
 import static io.restassured.http.ContentType.TEXT;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -98,5 +102,15 @@ public abstract class IntegrationTest {
                 .then()
                 .status(OK)
                 .extract().response().as(transactionType);
+    }
+
+    protected String importMerchants(URL resource) throws URISyntaxException {
+        return given()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .multiPart(new File(resource.toURI()))
+                .post(MERCHANTS_PATH + "/import")
+                .then()
+                .status(OK)
+                .extract().response().asString();
     }
 }

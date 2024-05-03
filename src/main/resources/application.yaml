@@ -18,3 +18,8 @@ server:
   port: 8080
   servlet:
     context-path: "/${spring.application.api-version}"
+
+payment:
+  system:
+    csv:
+      lines-to-process: 10

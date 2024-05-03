@@ -20,7 +20,8 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
         <jacoco.version>0.8.12</jacoco.version>
-        <springdoc-openapii.version>2.5.0</springdoc-openapii.version>
+        <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
+        <opencsv.version>5.9</opencsv.version>
     </properties>
 
     <dependencies>
@@ -36,7 +37,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -60,11 +65,11 @@
             <artifactId>validation-api</artifactId>
             <version>${validation-api.version}</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc-openapii.version}</version>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
         </dependency>
 
         <dependency>

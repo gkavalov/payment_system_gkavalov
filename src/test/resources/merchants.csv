@@ -1,0 +1,3 @@
+name,description,email,status,totalTransactionSum
+merchant_1,merchant one,merchant@one.mail,INACTIVE,
+merchant_2,merchant two,merchant@two.mail,ACTIVE,1.0

@@ -1,5 +1,7 @@
 package gkavalov.emerchantpay.payment.system.service.impl;
 
+import gkavalov.emerchantpay.payment.system.csv.PaymentSystemCsvReader;
+import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
@@ -8,11 +10,14 @@ import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.repository.MerchantRepository;
 import gkavalov.emerchantpay.payment.system.service.MerchantService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +27,9 @@ import static gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus.A
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MerchantServiceImpl implements MerchantService {
+
+    @Value("${payment.system.csv.lines-to-process}")
+    private int csvLinesBatchProcessing;
 
     private final MerchantRepository merchantRepository;
     private final MerchantMapper merchantMapper;
@@ -56,8 +64,18 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public long bulkImport(final InputStream inputStream) {
-        return 0;
+    @Transactional
+    public long bulkImport(final InputStream inputStream) throws CorruptCsvFileException {
+        try (final PaymentSystemCsvReader<CreateUpdateMerchantDto> merchantsReader =
+                     new PaymentSystemCsvReader<>(inputStream, CreateUpdateMerchantDto.class)) {
+            // process batches of lines
+            while (merchantsReader.readNextNLines(csvLinesBatchProcessing)) {
+                merchantRepository.saveAll(merchantMapper.toEntity(merchantsReader.getReadRowObjects()));
+            }
+            return merchantsReader.getReadValidRowsCount();
+        } catch (final IOException e) {
+            throw new CorruptCsvFileException(e);
+        }
     }
 
     @Override

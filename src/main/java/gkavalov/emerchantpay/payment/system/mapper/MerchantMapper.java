@@ -21,9 +21,14 @@ public interface MerchantMapper {
 
     CreateUpdateMerchantDto toCreateUpdateDto(final Merchant merchant);
 
+    Set<Merchant> toEntity(Set<CreateUpdateMerchantDto> createUpdateMerchants);
+
+    Merchant toEntity(CreateUpdateMerchantDto createUpdateMerchant);
+
     @Mapping(target = "transactions", ignore = true)
     Merchant toEntity(final MerchantDto merchant);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateMerchant(@MappingTarget final Merchant merchant, final CreateUpdateMerchantDto merchantDto);
+
 }

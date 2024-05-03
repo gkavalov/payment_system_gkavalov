@@ -7,3 +7,8 @@ spring:
     username: payment_system
     password: payment_system
     driver-class-name: org.h2.Driver
+
+payment:
+  system:
+    csv:
+      lines-to-process: 2

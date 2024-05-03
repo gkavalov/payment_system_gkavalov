@@ -7,8 +7,13 @@ import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTrans
 import gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static gkavalov.emerchantpay.payment.system.TestConstants.MOCK_MERCHANT_1;
 import static gkavalov.emerchantpay.payment.system.TestConstants.MOCK_TRANSACTION_1;
@@ -52,6 +57,7 @@ class MerchantControllerTest extends IntegrationTest {
     }
 
     @Test
+    @DirtiesContext
     void testTransactionForMerchant() {
         final CreateUpdateMerchantDto merchantDto = merchantMapper.toCreateUpdateDto(MOCK_MERCHANT_1);
         merchantDto.setTotalTransactionSum(new BigDecimal("0.0"));
@@ -64,8 +70,33 @@ class MerchantControllerTest extends IntegrationTest {
         final MerchantDto latestMerchant = getMerchant(merchantLocation, merchantDto);
 
         assertEquals(transactionDto.getCustomerAmount(), latestMerchant.getTransactions().toArray(new AuthorizeTransactionDto[]{})[0].getCustomerAmount());
-
-        // clean up
-        deleteMerchant(merchantLocation);
     }
+
+    @Test
+    @DirtiesContext
+    void testMerchantsImport() throws URISyntaxException {
+
+        // check
+        getAllMerchants(0);
+
+        final URL initialMerchants = getClass().getClassLoader().getResource("merchants.csv");
+        String importResponse = importMerchants(initialMerchants);
+
+        // assert total merchants
+        Pattern numberPattern = Pattern.compile("^(\\d+)(.*)$");
+        Matcher matcher = numberPattern.matcher(importResponse);
+        matcher.find();
+        int initialImportSize = Integer.parseInt(matcher.group(1));
+        getAllMerchants(initialImportSize);
+
+        // add more merchants
+        final URL moreMerchants = getClass().getClassLoader().getResource("many_merchants.csv");
+        String moreMerchantsResponse = importMerchants(moreMerchants);
+
+        // assert total merchants
+        matcher = numberPattern.matcher(moreMerchantsResponse);
+        matcher.find();
+        int newlyImportedMerchants = Integer.parseInt(matcher.group(1));
+        getAllMerchants(initialImportSize + newlyImportedMerchants);
+     }
 }

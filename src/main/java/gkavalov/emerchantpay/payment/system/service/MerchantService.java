@@ -1,5 +1,6 @@
 package gkavalov.emerchantpay.payment.system.service;
 
+import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
@@ -24,5 +25,5 @@ public interface MerchantService {
 
     Merchant updateMerchant(final Merchant merchant);
 
-    long bulkImport(InputStream inputStream);
+    long bulkImport(InputStream inputStream) throws CorruptCsvFileException;
 }

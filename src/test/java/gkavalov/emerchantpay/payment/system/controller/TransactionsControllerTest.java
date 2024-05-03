@@ -8,6 +8,7 @@ import gkavalov.emerchantpay.payment.system.model.dto.transaction.ChargeTransact
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 class TransactionsControllerTest extends IntegrationTest {
 
     @Test
+    @DirtiesContext
     void testPayForTransaction() {
         // prepare necessary payloads
         final CreateUpdateMerchantDto merchantDto = merchantMapper.toCreateUpdateDto(MOCK_MERCHANT_1);
@@ -57,8 +59,5 @@ class TransactionsControllerTest extends IntegrationTest {
         // assert if database records are updated accordingly
         MerchantDto merchant = getMerchant(merchantLocation, merchantDto);
         assertEquals(MOCK_TRANSACTION_2.getApprovedAmount().stripTrailingZeros(), merchant.getTotalTransactionSum().stripTrailingZeros());
-
-        // cleanup
-        deleteMerchant(merchantLocation);
     }
 }

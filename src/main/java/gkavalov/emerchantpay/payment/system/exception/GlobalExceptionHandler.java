@@ -14,7 +14,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({InactiveMerchantException.class, NonPayableTransactionException.class})
+    @ExceptionHandler({InactiveMerchantException.class, NonPayableTransactionException.class,
+            EmptyCsvFileException.class})
     public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NO_CONTENT);
     }
