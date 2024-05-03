@@ -1,6 +1,7 @@
 package gkavalov.emerchantpay.payment.system.mapper;
 
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +56,7 @@ class TransactionMapperTest {
     @Test
     void testEntityConversionWithMerchant() {
         TransactionDto mappedTransactionDto = mapperToTest.toDto(MOCK_TRANSACTION_1);
-        Transaction entityWithMerchant = mapperToTest.toEntityWithMerchant(mappedTransactionDto, MOCK_MERCHANT_1);
+        Transaction entityWithMerchant = mapperToTest.toEntityWithMerchant((AuthorizeTransactionDto) mappedTransactionDto, MOCK_MERCHANT_1);
 
         assertEquals(entityWithMerchant.getAmount(), mappedTransactionDto.getAmount());
         assertEquals(entityWithMerchant.getStatus(), mappedTransactionDto.getStatus());

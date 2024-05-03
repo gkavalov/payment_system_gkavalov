@@ -3,11 +3,11 @@ package gkavalov.emerchantpay.payment.system.controller;
 import gkavalov.emerchantpay.payment.system.IntegrationTest;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
+import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
 import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.dto.transaction.ChargeTransactionDto;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.RefundTransactionDto;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
@@ -15,13 +15,12 @@ import java.math.BigDecimal;
 import static gkavalov.emerchantpay.payment.system.TestConstants.*;
 import static gkavalov.emerchantpay.payment.system.controller.TransactionController.TRANSACTIONS_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.http.HttpStatus.CREATED;
 
 class TransactionsControllerTest extends IntegrationTest {
 
     @Test
     @DirtiesContext
-    void testPayForTransaction() {
+    void testReferenceTransactionFlow() {
         // prepare necessary payloads
         final CreateUpdateMerchantDto merchantDto = merchantMapper.toCreateUpdateDto(MOCK_MERCHANT_1);
         merchantDto.setTotalTransactionSum(new BigDecimal("0.0"));
@@ -41,15 +40,8 @@ class TransactionsControllerTest extends IntegrationTest {
         assertEquals(authoriseTransaction.getMerchant().getName(), retrievedTransaction.getMerchant().getName());
 
         // pay for transaction
-        ChargeTransactionDto charge = transactionMapper.toDto(MOCK_TRANSACTION_2, ChargeTransactionDto.class);
-        final String paidTransactionLocation = RestAssuredMockMvc.given()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(charge)
-                .post(transactionLocation + "/payment")
-                .then()
-                .status(CREATED)
-                .extract()
-                .response().getHeader("Location");
+        TransactionDto charge = transactionMapper.toDto(MOCK_TRANSACTION_2);
+        final String paidTransactionLocation = referTransaction(charge, transactionLocation);
 
         ChargeTransactionDto chargedTransaction = getTransaction(TRANSACTIONS_PATH + "/" + paidTransactionLocation, ChargeTransactionDto.class);
 
@@ -59,5 +51,17 @@ class TransactionsControllerTest extends IntegrationTest {
         // assert if database records are updated accordingly
         MerchantDto merchant = getMerchant(merchantLocation, merchantDto);
         assertEquals(MOCK_TRANSACTION_2.getApprovedAmount().stripTrailingZeros(), merchant.getTotalTransactionSum().stripTrailingZeros());
+
+        // refund transaction
+        TransactionDto refund = transactionMapper.toDto(MOCK_TRANSACTION_3);
+        final String refundedTransactionLocation = referTransaction(refund, TRANSACTIONS_PATH + "/" + paidTransactionLocation);
+
+        RefundTransactionDto refundedTransaction = getTransaction(TRANSACTIONS_PATH + "/" + refundedTransactionLocation, RefundTransactionDto.class);
+        assertEquals(MOCK_TRANSACTION_3.getReferenceId(), refundedTransaction.getReferenceId());
+        merchant = getMerchant(merchantLocation, merchantDto);
+        assertEquals(merchantDto.getTotalTransactionSum()
+                        .add(chargedTransaction.getApprovedAmount())
+                        .subtract(refundedTransaction.getReversedAmount()).stripTrailingZeros(),
+                merchant.getTotalTransactionSum().stripTrailingZeros());
     }
 }

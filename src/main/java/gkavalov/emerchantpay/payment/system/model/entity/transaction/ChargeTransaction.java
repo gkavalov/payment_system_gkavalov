@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import static gkavalov.emerchantpay.payment.system.validation.TransactionSumValidator.validateTotalTransactionSum;
+
 @Entity
 @Getter
 @Setter
@@ -37,24 +39,12 @@ public class ChargeTransaction extends Transaction {
 
     public ChargeTransaction(final ChargeTransactionDto chargeDto) {
         this(null, chargeDto.getTimestamp(), chargeDto.getAmount(), chargeDto.getStatus(), chargeDto.getCustomerEmail(), chargeDto.getCustomerPhone(),
-                chargeDto.getReferenceId(),
-                // TODO Map these correctly
-                new AuthorizeTransaction(), new Merchant(),
+                chargeDto.getReferenceId(), new AuthorizeTransaction(), new Merchant(),
                 chargeDto.getApprovedAmount());
     }
 
     @PostPersist
     public void validateTotalSum() throws InvalidTotalSumException {
-        // TODO Factor out buisness logic away from model
-        BigDecimal expectedTotalTransactionSum = getMerchant().getTotalTransactionSum();
-        BigDecimal actualChargedSum = getMerchant().getTransactions()
-                .stream()
-                .filter(ChargeTransaction.class::isInstance)
-                .map(t -> ((ChargeTransaction) t).getApprovedAmount())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        if (!expectedTotalTransactionSum.stripTrailingZeros().equals(actualChargedSum.stripTrailingZeros())) {
-            throw new InvalidTotalSumException(getMerchant().getId());
-        }
+        validateTotalTransactionSum(getMerchant());
     }
 }

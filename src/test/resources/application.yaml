@@ -11,7 +11,7 @@ spring:
 payment:
   system:
     csv:
-      lines-to-process: 2
+      linesToProcess: 2
     transactions:
       cleaner:
         frequencyInSeconds: 5

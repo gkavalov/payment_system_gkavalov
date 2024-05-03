@@ -22,7 +22,7 @@ server:
 payment:
   system:
     csv:
-      lines-to-process: 10
+      linesToProcess: 10
     transactions:
       cleaner:
         frequencyInSeconds: 60

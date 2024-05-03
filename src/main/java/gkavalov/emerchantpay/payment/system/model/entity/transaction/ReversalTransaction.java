@@ -22,9 +22,7 @@ public class ReversalTransaction extends Transaction {
 
     public ReversalTransaction(final ReversalTransactionDto reversal) {
         this(null, reversal.getTimestamp(), reversal.getAmount(), reversal.getStatus(), reversal.getCustomerEmail(), reversal.getCustomerPhone(),
-                reversal.getReferenceId(),
-                // TODO Map these correctly
-                new AuthorizeTransaction(), new Merchant());
+                reversal.getReferenceId(), new AuthorizeTransaction(), new Merchant());
     }
 
     @PostPersist

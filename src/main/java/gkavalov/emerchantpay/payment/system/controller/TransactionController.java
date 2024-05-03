@@ -1,11 +1,9 @@
 package gkavalov.emerchantpay.payment.system.controller;
 
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
-import gkavalov.emerchantpay.payment.system.exception.NonPayableTransactionException;
 import gkavalov.emerchantpay.payment.system.mapper.TransactionMapper;
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
-import gkavalov.emerchantpay.payment.system.model.dto.transaction.ChargeTransactionDto;
-import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
+import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import gkavalov.emerchantpay.payment.system.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +34,11 @@ public class TransactionController {
         return ResponseEntity.ok(transactionMapper.toDto(transactionService.getTransaction(uuid)));
     }
 
-    @PostMapping("/{uuid}/payment")
-    public ResponseEntity<String> acceptPaymentForTransaction(@PathVariable("uuid") final UUID uuid,
-                                                              @RequestBody final ChargeTransactionDto transactionDto)
-            throws URISyntaxException, NonPayableTransactionException, InactiveMerchantException {
-        final ChargeTransaction charge = transactionService.paymentForTransaction(uuid, transactionDto);
-        return ResponseEntity.created(new URI(charge.getUuid().toString())).build();
+    @PostMapping("/{uuid}")
+    public ResponseEntity<String> referTransaction(@PathVariable("uuid") final UUID uuid,
+                                                   @RequestBody final TransactionDto transactionDto)
+            throws URISyntaxException, InactiveMerchantException {
+        final Transaction transaction = transactionService.referTransaction(uuid, transactionDto);
+        return ResponseEntity.created(new URI(transaction.getUuid().toString())).build();
     }
 }

@@ -1,8 +1,16 @@
 package gkavalov.emerchantpay.payment.system.mapper;
 
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.ChargeTransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.RefundTransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.ReversalTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.AuthorizeTransaction;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.RefundTransaction;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.ReversalTransaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -46,5 +54,17 @@ public interface TransactionMapper extends TransactionsFactory {
 
     @Mapping(target = "status", source = "transactionDto.status")
     @Mapping(target = "merchant", source = "merchant")
-    Transaction toEntityWithMerchant(final TransactionDto transactionDto, final Merchant merchant);
+    AuthorizeTransaction toEntityWithMerchant(final AuthorizeTransactionDto transactionDto, final Merchant merchant);
+
+    @Mapping(target = "status", source = "transactionDto.status")
+    @Mapping(target = "merchant", source = "merchant")
+    ChargeTransaction toEntityWithMerchant(final ChargeTransactionDto transactionDto, final Merchant merchant);
+
+    @Mapping(target = "status", source = "transactionDto.status")
+    @Mapping(target = "merchant", source = "merchant")
+    RefundTransaction toEntityWithMerchant(final RefundTransactionDto transactionDto, final Merchant merchant);
+
+    @Mapping(target = "status", source = "transactionDto.status")
+    @Mapping(target = "merchant", source = "merchant")
+    ReversalTransaction toEntityWithMerchant(final ReversalTransactionDto transactionDto, final Merchant merchant);
 }

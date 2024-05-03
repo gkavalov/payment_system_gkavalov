@@ -1,9 +1,8 @@
 package gkavalov.emerchantpay.payment.system.service;
 
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
-import gkavalov.emerchantpay.payment.system.exception.NonPayableTransactionException;
 import gkavalov.emerchantpay.payment.system.mapper.TransactionMapperImpl;
-import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.dto.transaction.ChargeTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
@@ -20,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static gkavalov.emerchantpay.payment.system.TestConstants.*;
+import static gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus.ERROR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,7 +88,7 @@ class TransactionServiceTest {
     @Test
     void testCreateTransaction() {
         // given
-        TransactionDto transactionDto = mockTransactionMapper.toDto(MOCK_TRANSACTION_1);
+        AuthorizeTransactionDto transactionDto = (AuthorizeTransactionDto) mockTransactionMapper.toDto(MOCK_TRANSACTION_1);
         when(mockTransactionRepository.save(any())).thenReturn(MOCK_TRANSACTION_1);
 
         // when
@@ -101,14 +101,15 @@ class TransactionServiceTest {
     }
 
     @Test
-    void testPayTransaction() throws NonPayableTransactionException, InactiveMerchantException {
+    void testPayTransaction() throws InactiveMerchantException {
         // given
         final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toDto(MOCK_TRANSACTION_2);
         when(mockTransactionRepository.findById(MOCK_TRANSACTION_1.getUuid())).thenReturn(Optional.of(MOCK_TRANSACTION_1));
         when(mockTransactionRepository.save(any())).thenReturn(MOCK_TRANSACTION_2);
 
         // when
-        final ChargeTransaction chargeTransaction = underTest.paymentForTransaction(MOCK_TRANSACTION_1.getUuid(), chargeDto);
+        final ChargeTransaction chargeTransaction = (ChargeTransaction) underTest.referTransaction(
+                MOCK_TRANSACTION_1.getUuid(), chargeDto);
 
         // then
         verify(mockTransactionRepository).save(transactionCaptor.capture());
@@ -120,12 +121,15 @@ class TransactionServiceTest {
     }
 
     @Test
-    void testPayIncorrectTransactionType() {
+    void testPayIncorrectTransactionType() throws InactiveMerchantException {
         // given
         final ChargeTransactionDto chargeDto = (ChargeTransactionDto) mockTransactionMapper.toDto(MOCK_TRANSACTION_2);
         when(mockTransactionRepository.findById(MOCK_TRANSACTION_2.getUuid())).thenReturn(Optional.of(MOCK_TRANSACTION_2));
 
-        // when and then
-        assertThrows(NonPayableTransactionException.class, () -> underTest.paymentForTransaction(MOCK_TRANSACTION_2.getUuid(), chargeDto));
+        // when
+        ChargeTransaction chargeTransaction = (ChargeTransaction) underTest.referTransaction(MOCK_TRANSACTION_2.getUuid(), chargeDto);
+
+        // then
+        assertEquals(ERROR, chargeTransaction.getStatus());
     }
 }

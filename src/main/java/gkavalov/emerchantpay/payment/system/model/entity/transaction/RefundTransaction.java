@@ -1,5 +1,6 @@
 package gkavalov.emerchantpay.payment.system.model.entity.transaction;
 
+import gkavalov.emerchantpay.payment.system.exception.InvalidTotalSumException;
 import gkavalov.emerchantpay.payment.system.model.dto.transaction.RefundTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
@@ -15,6 +16,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import static gkavalov.emerchantpay.payment.system.validation.TransactionSumValidator.validateTotalTransactionSum;
 
 @Entity
 @Getter
@@ -35,16 +38,13 @@ public class RefundTransaction extends Transaction {
 
     public RefundTransaction(final RefundTransactionDto refund) {
         this(null, refund.getTimestamp(), refund.getAmount(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
-                refund.getReferenceId(),
-                // TODO Map these correctly
-                new ChargeTransaction(), new Merchant(),
+                refund.getReferenceId(), new ChargeTransaction(), new Merchant(),
                 refund.getReversedAmount());
     }
 
     @PostPersist
-    private void updateTransactionAndPropagateSum() {
+    private void updateTransactionAndPropagateSum() throws InvalidTotalSumException {
         setStatus(TransactionStatus.REFUNDED);
-
-        // TODO decrease the merchant's total transaction amount
+        validateTotalTransactionSum(getMerchant());
     }
 }

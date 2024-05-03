@@ -48,8 +48,6 @@ class MerchantMapperTest {
         assertEquals(entity.getEmail(), MOCK_MERCHANT_1.getEmail());
         assertEquals(entity.getStatus(), MOCK_MERCHANT_1.getStatus());
         assertEquals(entity.getTotalTransactionSum(), MOCK_MERCHANT_1.getTotalTransactionSum());
-        // TODO Resolve the cyclical mapping
-        //assertEquals(entity.getTransactions().size(), MOCK_MERCHANT_1.getTransactions().size());
     }
 
     @Test

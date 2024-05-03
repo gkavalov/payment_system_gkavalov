@@ -16,8 +16,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler({InactiveMerchantException.class, NonPayableTransactionException.class,
-            EmptyCsvFileException.class})
+    @ExceptionHandler({InactiveMerchantException.class, EmptyCsvFileException.class})
     public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
         log.warn(ex.getMessage());
         return ResponseEntity.noContent().build();

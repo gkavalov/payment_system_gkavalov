@@ -7,6 +7,7 @@ import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
 import gkavalov.emerchantpay.payment.system.model.entity.Merchant;
 import gkavalov.emerchantpay.payment.system.model.entity.Transaction;
 import gkavalov.emerchantpay.payment.system.service.MerchantService;
@@ -82,10 +83,10 @@ public class MerchantController {
 
     @PostMapping("/{id}/transactions")
     public ResponseEntity<TransactionDto> createTransaction(@PathVariable("id") final Long id,
-                                                            @RequestBody final TransactionDto transactionDto)
+                                                            @RequestBody final AuthorizeTransactionDto authTransaction)
             throws InactiveMerchantException, URISyntaxException {
         final Merchant merchant = merchantService.isMerchantActive(id);
-        Transaction transaction = transactionService.createTransactionForMerchant(transactionDto, merchant);
+        Transaction transaction = transactionService.createTransactionForMerchant(authTransaction, merchant);
         return ResponseEntity.created(new URI("/transactions/" + transaction.getUuid().toString())).build();
     }
 }

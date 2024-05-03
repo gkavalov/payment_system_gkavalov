@@ -28,7 +28,7 @@ import static gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus.A
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MerchantServiceImpl implements MerchantService {
 
-    @Value("${payment.system.csv.lines-to-process}")
+    @Value("${payment.system.csv.linesToProcess}")
     private int csvLinesBatchProcessing;
 
     private final MerchantRepository merchantRepository;

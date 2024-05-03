@@ -113,4 +113,15 @@ public abstract class IntegrationTest {
                 .status(OK)
                 .extract().response().asString();
     }
+
+    protected String referTransaction(TransactionDto charge, String transactionLocation) {
+        return RestAssuredMockMvc.given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(charge)
+                .post(transactionLocation)
+                .then()
+                .status(CREATED)
+                .extract()
+                .response().getHeader("Location");
+    }
 }

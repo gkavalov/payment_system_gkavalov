@@ -5,6 +5,7 @@ import gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus;
 import gkavalov.emerchantpay.payment.system.model.entity.TransactionStatus;
 import gkavalov.emerchantpay.payment.system.model.entity.transaction.AuthorizeTransaction;
 import gkavalov.emerchantpay.payment.system.model.entity.transaction.ChargeTransaction;
+import gkavalov.emerchantpay.payment.system.model.entity.transaction.RefundTransaction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,11 @@ public class TestConstants {
     public static final ChargeTransaction MOCK_TRANSACTION_2 =
             new ChargeTransaction(UUID.randomUUID(), null, new BigDecimal("1.0"), TransactionStatus.APPROVED,
                     "test@customer.email", "0123456789", UUID.randomUUID().toString(), MOCK_TRANSACTION_1,
+                    MOCK_MERCHANT_1, new BigDecimal("1.0"));
+
+    public static final RefundTransaction MOCK_TRANSACTION_3 =
+            new RefundTransaction(UUID.randomUUID(), null, new BigDecimal("1.0"), TransactionStatus.APPROVED,
+                    "test@customer.email", "0123456789", UUID.randomUUID().toString(), MOCK_TRANSACTION_2,
                     MOCK_MERCHANT_1, new BigDecimal("1.0"));
 
     static {

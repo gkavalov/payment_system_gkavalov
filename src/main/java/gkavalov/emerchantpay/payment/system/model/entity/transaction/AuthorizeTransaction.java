@@ -34,9 +34,7 @@ public class AuthorizeTransaction extends Transaction {
 
     public AuthorizeTransaction(final AuthorizeTransactionDto authDto) {
         this(null, authDto.getTimestamp(), authDto.getAmount(), authDto.getStatus(), authDto.getCustomerEmail(), authDto.getCustomerPhone(),
-                authDto.getReferenceId(),
-                // TODO Map these correctly
-                new Merchant(),
+                authDto.getReferenceId(), new Merchant(),
                 authDto.getCustomerAmount());
     }
 }
