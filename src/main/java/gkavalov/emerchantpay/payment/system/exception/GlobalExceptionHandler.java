@@ -1,27 +1,31 @@
 package gkavalov.emerchantpay.payment.system.exception;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleMissingData(final EntityNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        log.warn(ex.getMessage());
+        return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler({InactiveMerchantException.class, NonPayableTransactionException.class,
             EmptyCsvFileException.class})
     public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NO_CONTENT);
+        log.warn(ex.getMessage());
+        return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralError(final Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        log.error(ex.getMessage());
+        return ResponseEntity.internalServerError().body(ex.getMessage());
     }
 }

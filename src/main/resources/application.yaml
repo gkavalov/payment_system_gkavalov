@@ -23,3 +23,7 @@ payment:
   system:
     csv:
       lines-to-process: 10
+    transactions:
+      cleaner:
+        frequencyInSeconds: 60
+        timeLimitInMins: 60

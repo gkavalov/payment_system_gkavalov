@@ -8,19 +8,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PostPersist;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
 public class ReversalTransaction extends Transaction {
 
-    public ReversalTransaction(final UUID uuid, final BigDecimal amount, final TransactionStatus status,
+    public ReversalTransaction(final UUID uuid, final ZonedDateTime timestamp, final BigDecimal amount, final TransactionStatus status,
                                final String customerEmail, final String customerPhone, final String referenceId,
                                final AuthorizeTransaction belongsTo, final Merchant merchant) {
-        super(uuid, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
+        super(uuid, timestamp, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
     }
 
     public ReversalTransaction(final ReversalTransactionDto reversal) {
-        this(null, reversal.getAmount(), reversal.getStatus(), reversal.getCustomerEmail(), reversal.getCustomerPhone(),
+        this(null, reversal.getTimestamp(), reversal.getAmount(), reversal.getStatus(), reversal.getCustomerEmail(), reversal.getCustomerPhone(),
                 reversal.getReferenceId(),
                 // TODO Map these correctly
                 new AuthorizeTransaction(), new Merchant());

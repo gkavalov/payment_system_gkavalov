@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,15 +25,15 @@ public class AuthorizeTransaction extends Transaction {
     @Column(name = "customer_amount")
     private BigDecimal customerAmount;
 
-    public AuthorizeTransaction(final UUID uuid, final BigDecimal amount, final TransactionStatus status,
+    public AuthorizeTransaction(final UUID uuid, final ZonedDateTime timestamp, final BigDecimal amount, final TransactionStatus status,
                                 final String customerEmail, final String customerPhone, final String referenceId,
                                 final Merchant merchant, final BigDecimal customerAmount) {
-        super(uuid, amount, status, customerEmail, customerPhone, referenceId, null, merchant);
+        super(uuid, timestamp, amount, status, customerEmail, customerPhone, referenceId, null, merchant);
         this.customerAmount = customerAmount;
     }
 
     public AuthorizeTransaction(final AuthorizeTransactionDto authDto) {
-        this(null, authDto.getAmount(), authDto.getStatus(), authDto.getCustomerEmail(), authDto.getCustomerPhone(),
+        this(null, authDto.getTimestamp(), authDto.getAmount(), authDto.getStatus(), authDto.getCustomerEmail(), authDto.getCustomerPhone(),
                 authDto.getReferenceId(),
                 // TODO Map these correctly
                 new Merchant(),

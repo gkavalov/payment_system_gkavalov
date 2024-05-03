@@ -12,3 +12,7 @@ payment:
   system:
     csv:
       lines-to-process: 2
+    transactions:
+      cleaner:
+        frequencyInSeconds: 5
+        timeLimitInMins: 1

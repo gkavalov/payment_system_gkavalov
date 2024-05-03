@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class ReversalTransactionDto extends TransactionDto {
 
     public ReversalTransactionDto(final ReversalTransaction reversal) {
-        super(reversal.getAmount(), reversal.getStatus(), reversal.getCustomerEmail(), reversal.getCustomerPhone(),
+        super(reversal.getAmount(), reversal.getTimestamp(), reversal.getStatus(), reversal.getCustomerEmail(), reversal.getCustomerPhone(),
                 reversal.getReferenceId(), null, null);
     }
 

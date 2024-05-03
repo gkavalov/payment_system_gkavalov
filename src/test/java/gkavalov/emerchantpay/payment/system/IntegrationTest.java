@@ -4,7 +4,7 @@ import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
 import gkavalov.emerchantpay.payment.system.mapper.TransactionMapper;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
 import gkavalov.emerchantpay.payment.system.model.dto.MerchantDto;
-import gkavalov.emerchantpay.payment.system.model.dto.transaction.AuthorizeTransactionDto;
+import gkavalov.emerchantpay.payment.system.model.dto.TransactionDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.hamcrest.Matchers;
@@ -84,7 +84,7 @@ public abstract class IntegrationTest {
                 .contentType(TEXT);
     }
 
-    protected String makeTransactionForMerchant(AuthorizeTransactionDto transactionDto, String merchantLocation) {
+    protected String makeTransactionForMerchant(TransactionDto transactionDto, String merchantLocation) {
         MockMvcResponse makeTransactionResponse = given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(transactionDto)

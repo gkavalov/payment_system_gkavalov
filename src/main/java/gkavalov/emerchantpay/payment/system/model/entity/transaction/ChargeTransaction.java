@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,15 +28,15 @@ public class ChargeTransaction extends Transaction {
     private BigDecimal approvedAmount;
 
 
-    public ChargeTransaction(final UUID uuid, final BigDecimal amount, final TransactionStatus status,
+    public ChargeTransaction(final UUID uuid, final ZonedDateTime timestamp, final BigDecimal amount, final TransactionStatus status,
                              final String customerEmail, final String customerPhone, final String referenceId,
                              final AuthorizeTransaction belongsTo, final Merchant merchant, final BigDecimal approvedAmount) {
-        super(uuid, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
+        super(uuid, timestamp, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
         this.approvedAmount = approvedAmount;
     }
 
     public ChargeTransaction(final ChargeTransactionDto chargeDto) {
-        this(null, chargeDto.getAmount(), chargeDto.getStatus(), chargeDto.getCustomerEmail(), chargeDto.getCustomerPhone(),
+        this(null, chargeDto.getTimestamp(), chargeDto.getAmount(), chargeDto.getStatus(), chargeDto.getCustomerEmail(), chargeDto.getCustomerPhone(),
                 chargeDto.getReferenceId(),
                 // TODO Map these correctly
                 new AuthorizeTransaction(), new Merchant(),

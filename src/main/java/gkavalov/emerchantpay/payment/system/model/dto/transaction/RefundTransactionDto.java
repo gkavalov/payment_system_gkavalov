@@ -21,7 +21,7 @@ public class RefundTransactionDto extends TransactionDto {
     private BigDecimal reversedAmount;
 
     public RefundTransactionDto(final RefundTransaction refund) {
-        super(refund.getAmount(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
+        super(refund.getAmount(), refund.getTimestamp(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
                 refund.getReferenceId(), null, null);
         this.reversedAmount = refund.getReversedAmount();
     }

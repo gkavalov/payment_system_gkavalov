@@ -20,4 +20,6 @@ public interface TransactionService {
     Transaction createTransactionForMerchant(final TransactionDto transactionDto, final Merchant merchant);
 
     ChargeTransaction paymentForTransaction(final UUID uuid, final ChargeTransactionDto transactionDto) throws NonPayableTransactionException, InactiveMerchantException;
+
+    long deleteOldTransactions(final int minutesLimit);
 }

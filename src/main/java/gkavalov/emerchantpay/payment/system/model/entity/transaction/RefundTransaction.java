@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,15 +26,15 @@ public class RefundTransaction extends Transaction {
     @Column(name = "reversed_amount")
     private BigDecimal reversedAmount;
 
-    public RefundTransaction(final UUID uuid, final BigDecimal amount, final TransactionStatus status,
+    public RefundTransaction(final UUID uuid, final ZonedDateTime timestamp, final BigDecimal amount, final TransactionStatus status,
                              final String customerEmail, final String customerPhone, final String referenceId,
                              final ChargeTransaction belongsTo, final Merchant merchant, final BigDecimal reversedAmount) {
-        super(uuid, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
+        super(uuid, timestamp, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
         this.reversedAmount = reversedAmount;
     }
 
     public RefundTransaction(final RefundTransactionDto refund) {
-        this(null, refund.getAmount(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
+        this(null, refund.getTimestamp(), refund.getAmount(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
                 refund.getReferenceId(),
                 // TODO Map these correctly
                 new ChargeTransaction(), new Merchant(),

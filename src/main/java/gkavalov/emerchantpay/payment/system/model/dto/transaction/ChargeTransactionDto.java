@@ -19,7 +19,7 @@ public class ChargeTransactionDto extends TransactionDto {
     private BigDecimal approvedAmount;
 
     public ChargeTransactionDto(final ChargeTransaction charge) {
-        super(charge.getAmount(), charge.getStatus(), charge.getCustomerEmail(), charge.getCustomerPhone(),
+        super(charge.getAmount(), charge.getTimestamp(), charge.getStatus(), charge.getCustomerEmail(), charge.getCustomerPhone(),
                 charge.getReferenceId(), null, null);
         this.approvedAmount = charge.getApprovedAmount();
     }

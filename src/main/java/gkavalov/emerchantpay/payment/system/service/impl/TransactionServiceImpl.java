@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -74,5 +75,13 @@ public class TransactionServiceImpl implements TransactionService {
         } else {
             throw new NonPayableTransactionException(transaction.getClass().getSimpleName(), uuid.toString());
         }
+    }
+
+    @Override
+    public long deleteOldTransactions(final int minutesLimit) {
+        final ZonedDateTime timestamp = ZonedDateTime.now().minusMinutes(minutesLimit);
+        final Set<Transaction> oldTransactions = transactionRepository.findByTimestampBefore(timestamp);
+        transactionRepository.deleteAll(oldTransactions);
+        return oldTransactions.size();
     }
 }
