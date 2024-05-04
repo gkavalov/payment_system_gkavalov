@@ -106,9 +106,9 @@ public abstract class IntegrationTest {
 
     protected String importMerchants(URL resource) throws URISyntaxException {
         return given()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
                 .multiPart(new File(resource.toURI()))
-                .post(MERCHANTS_PATH + "/import")
+                .post(MERCHANTS_PATH)
                 .then()
                 .status(OK)
                 .extract().response().asString();

@@ -25,17 +25,17 @@ public class TestConstants {
             new BigDecimal("1.0"), new HashSet<>());
 
     public static final AuthorizeTransaction MOCK_TRANSACTION_1 =
-            new AuthorizeTransaction(UUID.randomUUID(), null, new BigDecimal("1.0"), TransactionStatus.APPROVED,
+            new AuthorizeTransaction(UUID.randomUUID(), null, TransactionStatus.APPROVED,
                     "test@customer.email", "0123456789", UUID.randomUUID().toString(),
                     MOCK_MERCHANT_1, new BigDecimal("1.0"));
 
     public static final ChargeTransaction MOCK_TRANSACTION_2 =
-            new ChargeTransaction(UUID.randomUUID(), null, new BigDecimal("1.0"), TransactionStatus.APPROVED,
+            new ChargeTransaction(UUID.randomUUID(), null, TransactionStatus.APPROVED,
                     "test@customer.email", "0123456789", UUID.randomUUID().toString(), MOCK_TRANSACTION_1,
                     MOCK_MERCHANT_1, new BigDecimal("1.0"));
 
     public static final RefundTransaction MOCK_TRANSACTION_3 =
-            new RefundTransaction(UUID.randomUUID(), null, new BigDecimal("1.0"), TransactionStatus.APPROVED,
+            new RefundTransaction(UUID.randomUUID(), null, TransactionStatus.APPROVED,
                     "test@customer.email", "0123456789", UUID.randomUUID().toString(), MOCK_TRANSACTION_2,
                     MOCK_MERCHANT_1, new BigDecimal("1.0"));
 

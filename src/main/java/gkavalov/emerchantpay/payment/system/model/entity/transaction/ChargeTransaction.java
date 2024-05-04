@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -27,18 +28,19 @@ import static gkavalov.emerchantpay.payment.system.validation.TransactionSumVali
 public class ChargeTransaction extends Transaction {
 
     @Column(name = "approved_amount")
+    @Positive
     private BigDecimal approvedAmount;
 
 
-    public ChargeTransaction(final UUID uuid, final ZonedDateTime timestamp, final BigDecimal amount, final TransactionStatus status,
+    public ChargeTransaction(final UUID uuid, final ZonedDateTime timestamp, final TransactionStatus status,
                              final String customerEmail, final String customerPhone, final String referenceId,
                              final AuthorizeTransaction belongsTo, final Merchant merchant, final BigDecimal approvedAmount) {
-        super(uuid, timestamp, amount, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
+        super(uuid, timestamp, status, customerEmail, customerPhone, referenceId, belongsTo, merchant);
         this.approvedAmount = approvedAmount;
     }
 
     public ChargeTransaction(final ChargeTransactionDto chargeDto) {
-        this(null, chargeDto.getTimestamp(), chargeDto.getAmount(), chargeDto.getStatus(), chargeDto.getCustomerEmail(), chargeDto.getCustomerPhone(),
+        this(null, chargeDto.getTimestamp(), chargeDto.getStatus(), chargeDto.getCustomerEmail(), chargeDto.getCustomerPhone(),
                 chargeDto.getReferenceId(), new AuthorizeTransaction(), new Merchant(),
                 chargeDto.getApprovedAmount());
     }

@@ -71,7 +71,6 @@ class TransactionServiceTest {
         assertEquals(transaction.getStatus(), MOCK_TRANSACTION_1.getStatus());
         assertEquals(transaction.getCustomerEmail(), MOCK_TRANSACTION_1.getCustomerEmail());
         assertEquals(transaction.getBelongsTo(), MOCK_TRANSACTION_1.getBelongsTo());
-        assertEquals(transaction.getAmount(), MOCK_TRANSACTION_1.getAmount());
         assertEquals(transaction.getCustomerPhone(), MOCK_TRANSACTION_1.getCustomerPhone());
         assertEquals(transaction.getMerchant().getId(), MOCK_TRANSACTION_1.getMerchant().getId());
     }

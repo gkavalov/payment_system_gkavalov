@@ -1,5 +1,6 @@
 package gkavalov.emerchantpay.payment.system.service;
 
+import gkavalov.emerchantpay.payment.system.exception.ActiveMerchantException;
 import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.model.dto.CreateUpdateMerchantDto;
@@ -19,11 +20,11 @@ public interface MerchantService {
 
     Merchant isMerchantActive(final Long id) throws InactiveMerchantException;
 
-    void deleteMerchant(final Long id);
+    void deleteMerchant(final Long id) throws ActiveMerchantException;
 
     Merchant updateMerchant(final Long id, final CreateUpdateMerchantDto merchant);
 
     Merchant updateMerchant(final Merchant merchant);
 
-    long bulkImport(InputStream inputStream) throws CorruptCsvFileException;
+    long bulkImport(final InputStream inputStream) throws CorruptCsvFileException;
 }

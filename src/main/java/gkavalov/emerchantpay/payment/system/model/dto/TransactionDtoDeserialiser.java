@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
+// TODO reuse built in serialisation
 public class TransactionDtoDeserialiser extends StdDeserializer<TransactionDto> {
 
     public TransactionDtoDeserialiser() {

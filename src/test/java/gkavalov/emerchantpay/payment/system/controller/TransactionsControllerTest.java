@@ -35,7 +35,6 @@ class TransactionsControllerTest extends IntegrationTest {
 
         assertEquals(authoriseTransaction.getCustomerAmount(), retrievedTransaction.getCustomerAmount());
         assertEquals(authoriseTransaction.getReferenceId(), retrievedTransaction.getReferenceId());
-        assertEquals(authoriseTransaction.getAmount(), retrievedTransaction.getAmount());
         assertEquals(authoriseTransaction.getStatus(), retrievedTransaction.getStatus());
         assertEquals(authoriseTransaction.getMerchant().getName(), retrievedTransaction.getMerchant().getName());
 

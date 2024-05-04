@@ -17,9 +17,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({InactiveMerchantException.class, EmptyCsvFileException.class})
-    public ResponseEntity<String> handleInactiveMerchant(final Exception ex) {
+    public ResponseEntity<String> handleNoContentProducers(final Exception ex) {
         log.warn(ex.getMessage());
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler({ActiveMerchantException.class})
+    public ResponseEntity<String> handleActiveMerchant(final ActiveMerchantException ex) {
+        log.warn(ex.getMessage());
+        return ResponseEntity.badRequest(). body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

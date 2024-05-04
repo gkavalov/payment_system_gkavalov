@@ -11,8 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -32,10 +30,6 @@ public class Transaction {
     @CreationTimestamp
     @DateTimeFormat(pattern = "dd-MM-yyyy'T'HH:mm:ssXXX")
     private ZonedDateTime timestamp = ZonedDateTime.now();
-
-    @Positive
-    @NotNull
-    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;

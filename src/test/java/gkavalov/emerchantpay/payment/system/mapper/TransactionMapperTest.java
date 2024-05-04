@@ -26,10 +26,8 @@ class TransactionMapperTest {
         TransactionDto mappedBelongsTo = mapperToTest.toNestedDto(MOCK_TRANSACTION_2.getBelongsTo());
         assertEquals(mappedDto.getBelongsTo().getCustomerPhone(), mappedBelongsTo.getCustomerPhone());
         assertEquals(mappedDto.getBelongsTo().getStatus(), mappedBelongsTo.getStatus());
-        assertEquals(mappedDto.getBelongsTo().getAmount(), mappedBelongsTo.getAmount());
         assertEquals(mappedDto.getBelongsTo().getReferenceId(), mappedBelongsTo.getReferenceId());
         assertEquals(mappedDto.getBelongsTo().getCustomerEmail(), mappedBelongsTo.getCustomerEmail());
-        assertEquals(mappedDto.getAmount(), MOCK_TRANSACTION_2.getAmount());
         assertEquals(mappedDto.getReferenceId(), MOCK_TRANSACTION_2.getReferenceId());
         assertEquals(mappedDto.getCustomerEmail(), MOCK_TRANSACTION_2.getCustomerEmail());
         assertEquals(mappedDto.getCustomerPhone(), MOCK_TRANSACTION_2.getCustomerPhone());
@@ -44,10 +42,8 @@ class TransactionMapperTest {
         TransactionDto mappedBelongsTo = mapperToTest.toNestedDto(MOCK_TRANSACTION_2.getBelongsTo());
         assertEquals(mappedEntity.getBelongsTo().getCustomerPhone(), mappedBelongsTo.getCustomerPhone());
         assertEquals(mappedEntity.getBelongsTo().getStatus(), mappedBelongsTo.getStatus());
-        assertEquals(mappedEntity.getBelongsTo().getAmount(), mappedBelongsTo.getAmount());
         assertEquals(mappedEntity.getBelongsTo().getReferenceId(), mappedBelongsTo.getReferenceId());
         assertEquals(mappedEntity.getBelongsTo().getCustomerEmail(), mappedBelongsTo.getCustomerEmail());
-        assertEquals(mappedEntity.getAmount(), MOCK_TRANSACTION_2.getAmount());
         assertEquals(mappedEntity.getReferenceId(), MOCK_TRANSACTION_2.getReferenceId());
         assertEquals(mappedEntity.getCustomerEmail(), MOCK_TRANSACTION_2.getCustomerEmail());
         assertEquals(mappedEntity.getCustomerPhone(), MOCK_TRANSACTION_2.getCustomerPhone());
@@ -58,7 +54,6 @@ class TransactionMapperTest {
         TransactionDto mappedTransactionDto = mapperToTest.toDto(MOCK_TRANSACTION_1);
         Transaction entityWithMerchant = mapperToTest.toEntityWithMerchant((AuthorizeTransactionDto) mappedTransactionDto, MOCK_MERCHANT_1);
 
-        assertEquals(entityWithMerchant.getAmount(), mappedTransactionDto.getAmount());
         assertEquals(entityWithMerchant.getStatus(), mappedTransactionDto.getStatus());
         assertEquals(entityWithMerchant.getReferenceId(), mappedTransactionDto.getReferenceId());
         assertEquals(entityWithMerchant.getCustomerEmail(), mappedTransactionDto.getCustomerEmail());

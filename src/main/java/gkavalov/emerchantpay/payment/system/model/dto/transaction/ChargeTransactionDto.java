@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Getter
@@ -16,10 +18,12 @@ import java.math.BigDecimal;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChargeTransactionDto extends TransactionDto {
 
+    @Positive
+    @NotNull
     private BigDecimal approvedAmount;
 
     public ChargeTransactionDto(final ChargeTransaction charge) {
-        super(charge.getAmount(), charge.getTimestamp(), charge.getStatus(), charge.getCustomerEmail(), charge.getCustomerPhone(),
+        super(charge.getTimestamp(), charge.getStatus(), charge.getCustomerEmail(), charge.getCustomerPhone(),
                 charge.getReferenceId(), null, null);
         this.approvedAmount = charge.getApprovedAmount();
     }

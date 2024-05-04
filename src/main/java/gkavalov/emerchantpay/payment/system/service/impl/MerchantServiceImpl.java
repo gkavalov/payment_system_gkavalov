@@ -1,6 +1,7 @@
 package gkavalov.emerchantpay.payment.system.service.impl;
 
 import gkavalov.emerchantpay.payment.system.csv.PaymentSystemCsvReader;
+import gkavalov.emerchantpay.payment.system.exception.ActiveMerchantException;
 import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
 import gkavalov.emerchantpay.payment.system.mapper.MerchantMapper;
@@ -12,7 +13,6 @@ import gkavalov.emerchantpay.payment.system.service.MerchantService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.Set;
 import static gkavalov.emerchantpay.payment.system.model.entity.MerchantStatus.ACTIVE;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 public class MerchantServiceImpl implements MerchantService {
 
     @Value("${payment.system.csv.linesToProcess}")
@@ -79,10 +79,14 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public void deleteMerchant(final Long id) {
-        merchantRepository.delete(getMerchant(id));
+    public void deleteMerchant(final Long id) throws ActiveMerchantException {
+        Merchant merchant = getMerchant(id);
+        if (merchant.getTransactions().isEmpty()) {
+            merchantRepository.delete(merchant);
+        } else {
+            throw new ActiveMerchantException(id, merchant.getTransactions().size());
+        }
     }
-
 
     @Override
     public Merchant isMerchantActive(Long id) throws InactiveMerchantException {

@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Getter
@@ -18,10 +20,12 @@ import java.math.BigDecimal;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RefundTransactionDto extends TransactionDto {
 
+    @Positive
+    @NotNull
     private BigDecimal reversedAmount;
 
     public RefundTransactionDto(final RefundTransaction refund) {
-        super(refund.getAmount(), refund.getTimestamp(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
+        super(refund.getTimestamp(), refund.getStatus(), refund.getCustomerEmail(), refund.getCustomerPhone(),
                 refund.getReferenceId(), null, null);
         this.reversedAmount = refund.getReversedAmount();
     }

@@ -1,5 +1,6 @@
 package gkavalov.emerchantpay.payment.system.controller;
 
+import gkavalov.emerchantpay.payment.system.exception.ActiveMerchantException;
 import gkavalov.emerchantpay.payment.system.exception.CorruptCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.EmptyCsvFileException;
 import gkavalov.emerchantpay.payment.system.exception.InactiveMerchantException;
@@ -22,7 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
 
-import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RestController
@@ -53,7 +54,7 @@ public class MerchantController {
         return ResponseEntity.created(new URI(merchant.getId().toString())).build();
     }
 
-    @PostMapping(value = "/import", consumes = APPLICATION_OCTET_STREAM_VALUE, produces = TEXT_PLAIN_VALUE)
+    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE, produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> importMerchants(@RequestParam("file") final MultipartFile merchantsCsv)
             throws EmptyCsvFileException, CorruptCsvFileException {
         if (merchantsCsv.isEmpty()) {
@@ -76,7 +77,7 @@ public class MerchantController {
     }
 
     @DeleteMapping(value = "/{id}", produces = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> destroyMerchant(@PathVariable("id") final Long id) {
+    public ResponseEntity<String> deleteMerchant(@PathVariable("id") final Long id) throws ActiveMerchantException {
         merchantService.deleteMerchant(id);
         return ResponseEntity.ok("Merchant %d deleted".formatted(id));
     }

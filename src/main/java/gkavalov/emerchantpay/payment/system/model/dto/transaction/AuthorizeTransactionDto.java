@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -18,11 +20,13 @@ import java.time.ZonedDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthorizeTransactionDto extends TransactionDto {
 
+    @Positive
+    @NotNull
     private BigDecimal customerAmount;
 
-    public AuthorizeTransactionDto(final BigDecimal amount, final ZonedDateTime timestamp, final TransactionStatus status, final String customerEmail,
+    public AuthorizeTransactionDto(final ZonedDateTime timestamp, final TransactionStatus status, final String customerEmail,
                                    final String customerPhone, final String referenceId, final BigDecimal customerAmount) {
-        super(amount, timestamp, status, customerEmail, customerPhone, referenceId, null, null);
+        super(timestamp, status, customerEmail, customerPhone, referenceId, null, null);
         this.customerAmount = customerAmount;
     }
 
@@ -32,7 +36,7 @@ public class AuthorizeTransactionDto extends TransactionDto {
     }
 
     public AuthorizeTransactionDto(final AuthorizeTransaction auth) {
-        super(auth.getAmount(), auth.getTimestamp(), auth.getStatus(), auth.getCustomerEmail(), auth.getCustomerPhone(),
+        super(auth.getTimestamp(), auth.getStatus(), auth.getCustomerEmail(), auth.getCustomerPhone(),
                 auth.getReferenceId(), null, null);
         this.customerAmount = auth.getCustomerAmount();
     }
